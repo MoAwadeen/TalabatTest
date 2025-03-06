@@ -17,6 +17,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import test.compose.R
 import test.compose.ui.theme.Bg
 import test.compose.ui.theme.Brown
@@ -46,16 +49,27 @@ fun SplashScreen(navController: NavController) {
 
             Spacer(modifier = Modifier.height(34.dp))
 
-            Button(onClick = { navController.navigate("login") }, modifier = Modifier.width(220.dp),colors = ButtonDefaults.buttonColors(containerColor = Orange)) {
-                Text(text = "Login", fontSize = 30.sp,color = Bg, fontFamily = androidx.compose.ui.text.font.FontFamily.SansSerif , fontWeight = androidx.compose.ui.text.font.FontWeight.Bold)
-            }
-
+            CustomButton(label = "Login") { navController.navigate("login") }
             Spacer(modifier = Modifier.height(16.dp))
-
-            Button(onClick = { navController.navigate("signup") }, modifier = Modifier.width(220.dp),colors = ButtonDefaults.buttonColors(containerColor = Orange)) {
-                Text(text = "Sign Up", fontSize = 30.sp,color = Bg, fontFamily = androidx.compose.ui.text.font.FontFamily.SansSerif , fontWeight = androidx.compose.ui.text.font.FontWeight.Bold)
-            }
+            CustomButton(label = "Sign Up") { navController.navigate("signup") }
         }
     }
 }
 
+@Composable
+fun CustomButton(label: String, onClick: () -> Unit) {
+    Button(
+        onClick = { onClick() },
+        modifier = Modifier.width(220.dp),
+        colors = ButtonDefaults.buttonColors(containerColor = Orange)
+    ) {
+        Text(
+            text = label,
+            fontSize = 24.sp,
+            color = Bg,
+            fontFamily = androidx.compose.ui.text.font.FontFamily.SansSerif,
+            fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
+            modifier = Modifier.padding(vertical = 8.dp)
+        )
+    }
+}
