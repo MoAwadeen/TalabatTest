@@ -18,13 +18,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import test.compose.R
+import test.compose.ui.theme.Bg
+import test.compose.ui.theme.Brown
+import test.compose.ui.theme.Orange
 
 @Composable
 fun SplashScreen(navController: NavController) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = Color.White),
+            .background(color = Bg),
         contentAlignment = Alignment.Center
     ) {
         Column(
@@ -33,23 +36,24 @@ fun SplashScreen(navController: NavController) {
         ) {
             Image(
                 modifier = Modifier
-                    .width(300.dp)
-                    .height(300.dp),
-                painter = painterResource(id = R.drawable.talabat),
+                    .width(400.dp)
+                    .height(400.dp),
+                alignment = Alignment.TopCenter,
+                painter = painterResource(id = R.drawable.splashimage),
                 contentDescription = "splash screen logo",
                 contentScale = ContentScale.Fit
             )
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(34.dp))
 
-            Button(onClick = { navController.navigate("login") }, modifier = Modifier.width(200.dp),colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFff5a01))) {
-                Text(text = "Login", fontSize = 28.sp,color = Color.White, fontFamily = androidx.compose.ui.text.font.FontFamily.SansSerif , fontWeight = androidx.compose.ui.text.font.FontWeight.Bold)
+            Button(onClick = { navController.navigate("login") }, modifier = Modifier.width(220.dp),colors = ButtonDefaults.buttonColors(containerColor = Orange)) {
+                Text(text = "Login", fontSize = 30.sp,color = Bg, fontFamily = androidx.compose.ui.text.font.FontFamily.SansSerif , fontWeight = androidx.compose.ui.text.font.FontWeight.Bold)
             }
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            Button(onClick = { navController.navigate("signup") }, modifier = Modifier.width(200.dp),colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFff5a01))) {
-                Text(text = "Sign Up", fontSize = 28.sp,color = Color.White, fontFamily = androidx.compose.ui.text.font.FontFamily.SansSerif , fontWeight = androidx.compose.ui.text.font.FontWeight.Bold)
+            Button(onClick = { navController.navigate("signup") }, modifier = Modifier.width(220.dp),colors = ButtonDefaults.buttonColors(containerColor = Orange)) {
+                Text(text = "Sign Up", fontSize = 30.sp,color = Bg, fontFamily = androidx.compose.ui.text.font.FontFamily.SansSerif , fontWeight = androidx.compose.ui.text.font.FontWeight.Bold)
             }
         }
     }
