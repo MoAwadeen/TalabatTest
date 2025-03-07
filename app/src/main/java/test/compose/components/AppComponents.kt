@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedTextField
@@ -67,47 +68,37 @@ fun NormalTextComponent(value: String) {
 }
 
 @Composable
-fun OutlinedTextFieldEmail(label: String) {
-    val text = remember { mutableStateOf("") }
-
+fun OutlinedTextFieldEmail(label: String, text: String, onValueChange: (String) -> Unit) {
     OutlinedTextField(
-        value = text.value,
-        onValueChange = { text.value = it },
+        value = text,
+        onValueChange = onValueChange,  // Add this to update state
         placeholder = { Text(label) },
         singleLine = true,
-        modifier = Modifier
-            .fillMaxWidth().background(Bg),
-        isError = text.value.isNotEmpty() && !text.value.contains('@'),
+        modifier = Modifier.fillMaxWidth(),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
         colors = OutlinedTextFieldDefaults.colors(
-            focusedBorderColor = Orange,   // Blue when focused
-            unfocusedBorderColor = Bg, // Gray when not focused
-            cursorColor = Orange,
-            focusedLabelColor = Bg,
-            unfocusedLabelColor = Brown  )// Label color when not focused
+            focusedBorderColor = Color.Blue,
+            unfocusedBorderColor = Color.Gray,
+            cursorColor = Color.Blue
+        )
     )
 }
 
 @Composable
-fun OutlinedTextFieldPassword(label: String) {
-    val text = remember { mutableStateOf("") }
-
+fun OutlinedTextFieldPassword(label: String, text: String, onValueChange: (String) -> Unit) {
     OutlinedTextField(
-        value = text.value,
-        onValueChange = { text.value = it },
+        value = text,
+        onValueChange = onValueChange,  // Add this to update state
         placeholder = { Text(label) },
         singleLine = true,
-        modifier = Modifier
-            .fillMaxWidth().background(Bg),
-        isError = text.value.isNotEmpty() && !text.value.contains('@'),
+        modifier = Modifier.fillMaxWidth(),
         visualTransformation = PasswordVisualTransformation(),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         colors = OutlinedTextFieldDefaults.colors(
-            focusedBorderColor = Orange,   // Blue when focused
-            unfocusedBorderColor = Bg, // Gray when not focused
-            cursorColor = Orange,
-            focusedLabelColor = Bg,
-            unfocusedLabelColor = Brown  )// Label color when not focused
+            focusedBorderColor = Color.Blue,
+            unfocusedBorderColor = Color.Gray,
+            cursorColor = Color.Blue
+        )
     )
 }
 
@@ -144,32 +135,34 @@ fun DifferentSizeTextComponent(value: String, size: TextUnit) {
 fun DifferentSizeTextComponentPreview(){
     DifferentSizeTextComponent(value = "Hello" , size = 20.sp)
 }
-
 @Composable
-fun OutlinedTextFieldName(label: String) {
-    val text = remember { mutableStateOf("") }
-
+fun OutlinedTextFieldName(
+    label: String,
+    value: String,
+    onValueChange: (String) -> Unit
+) {
     OutlinedTextField(
-        value = text.value,
-        onValueChange = { text.value = it },
-        placeholder = { Text(label) },
+        value = value,
+        onValueChange = onValueChange,
+        label = { Text(label) },
         singleLine = true,
         modifier = Modifier
-            .fillMaxWidth().background(Bg),
-        isError = text.value.isNotEmpty() && text.value.length<2,
+            .fillMaxWidth()
+            .background(Bg),
+        isError = value.isNotEmpty() && value.length < 2,
         colors = OutlinedTextFieldDefaults.colors(
-            focusedBorderColor = Orange,   // Blue when focused
-            unfocusedBorderColor = Bg, // Gray when not focused
-            cursorColor = Orange,
-            focusedLabelColor = Bg,
-            unfocusedLabelColor = Brown  )// Label color when not focused
+            focusedBorderColor = Orange,
+            unfocusedBorderColor = Bg,
+            cursorColor = Orange
+        )
     )
 }
+
 
 @Preview
 @Composable
 fun OutlinedTextFieldNamePreview(){
-    OutlinedTextFieldName(label = "Merna")
+    //OutlinedTextFieldName(label = "Merna")
 }
 
 @Composable
@@ -250,4 +243,31 @@ fun ClickableTextComponent(value: String , onClick: () -> Unit) {
             color = Brown),
         textAlign = TextAlign.Center
     )
+}
+
+@Composable
+fun ShowAlertDialog() {
+    var showDialog by remember { mutableStateOf(false) }
+
+    Button(onClick = { showDialog = true }) {
+        Text("Show Alert")
+    }
+
+    if (showDialog) {
+        AlertDialog(
+            onDismissRequest = { showDialog = false },
+            title = { Text("Alert") },
+            text = { Text("This is an alert message.") },
+            confirmButton = {
+                Button(onClick = { showDialog = false }) {
+                    Text("OK")
+                }
+            },
+            dismissButton = {
+                Button(onClick = { showDialog = false }) {
+                    Text("Cancel")
+                }
+            }
+        )
+    }
 }
