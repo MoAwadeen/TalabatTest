@@ -15,6 +15,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import test.compose.components.BoldTextComponent
 import test.compose.components.NormalTextComponent
 import test.compose.components.OutlinedTextFieldEmail
@@ -61,7 +62,7 @@ fun LoginScreenPreview(){
     Surface (
         modifier = Modifier.fillMaxSize().background(Bg),
     ){
-        LoginScreen(navController = NavController(LocalContext.current))
+        LoginScreen(rememberNavController())
     }
 
 }

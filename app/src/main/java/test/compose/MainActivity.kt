@@ -15,6 +15,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import test.compose.ui.theme.MyApplicationTheme
+import test.compose.view.AppNavigationGraph
 import test.compose.view.SplashScreen
 
 class MainActivity : ComponentActivity() {
@@ -31,13 +32,8 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun NavigatePage() {
-    val navController = rememberNavController()
-    NavHost(
-        navController = navController,
-        startDestination = "splash"
-    ) {
-        composable("splash") {
-            SplashScreen(navController = navController)
-        }
-    }
+    AppNavigationGraph()
 }
+
+
+
