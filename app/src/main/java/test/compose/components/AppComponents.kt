@@ -1,6 +1,7 @@
 package test.compose.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
@@ -32,7 +33,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import test.compose.ui.theme.*
+import test.compose.ui.theme.Bg
+import test.compose.ui.theme.Brown
+import test.compose.ui.theme.Orange
 
 @Composable
 fun BoldTextComponent(value: String) {
@@ -233,4 +236,18 @@ fun OutlinedTextFieldConfirmPasswordPreview() {
     val password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
     OutlinedTextFieldConfirmPassword(label = "Confirm Password", password = password, confirmPassword = confirmPassword, onConfirmPasswordChange = { confirmPassword = it })
+}
+
+@Composable
+fun ClickableTextComponent(value: String , onClick: () -> Unit) {
+    Text(
+        text = value,
+        modifier = Modifier.fillMaxWidth().heightIn(min = 40.dp).clickable { onClick() },
+        style = TextStyle(
+            fontSize = 20.sp,
+            fontWeight = FontWeight.SemiBold,
+            fontStyle = FontStyle.Normal,
+            color = Brown),
+        textAlign = TextAlign.Center
+    )
 }
