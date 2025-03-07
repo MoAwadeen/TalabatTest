@@ -11,17 +11,17 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import test.compose.components.BasicButton
 import test.compose.components.BoldTextComponent
+import test.compose.components.ClickableTextComponent
 import test.compose.components.NormalTextComponent
 import test.compose.components.OutlinedTextFieldEmail
-import test.compose.components.*
+import test.compose.components.OutlinedTextFieldPassword
 import test.compose.ui.theme.Bg
-import test.compose.ui.theme.Brown
 
 @Composable
 fun LoginScreen(navController: NavController){
@@ -31,7 +31,7 @@ fun LoginScreen(navController: NavController){
     )
     {
         Column (modifier = Modifier.fillMaxSize()){
-            Spacer(modifier = Modifier.height(97.dp))
+            Spacer(modifier = Modifier.height(20.dp))
             BoldTextComponent(value = "Login here")
             Spacer(modifier = Modifier.height(26.dp))
             NormalTextComponent(value = "Welcome back you’ve\n" +
@@ -45,10 +45,13 @@ fun LoginScreen(navController: NavController){
             Spacer(modifier = Modifier.height(29.dp))
             BasicButton(
                 label = "Sign in",
-                onClick = {}
+                onClick = {navController.navigate(Routes.REGISTER)}
             )
             Spacer(modifier = Modifier.height(29.dp))
-            NormalTextComponent(value = "Create new account")
+            ClickableTextComponent(
+                value = "Create new account ?",
+                onClick = {navController.navigate(Routes.REGISTER)}
+            )
 
         }
 

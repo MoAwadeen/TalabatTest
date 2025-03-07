@@ -1,18 +1,33 @@
 package test.compose.view
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import test.compose.components.*
+import test.compose.components.BasicButton
+import test.compose.components.BoldTextComponent
+import test.compose.components.ClickableTextComponent
+import test.compose.components.DifferentSizeTextComponent
+import test.compose.components.OutlinedTextFieldConfirmPassword
+import test.compose.components.OutlinedTextFieldEmail
+import test.compose.components.OutlinedTextFieldName
+import test.compose.components.OutlinedTextFieldPasswordSignUp
 import test.compose.ui.theme.Bg
 
 @Composable
@@ -28,7 +43,7 @@ fun RegisterScreen(navController: NavController) {
         color = Color.White
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
-            Spacer(modifier = Modifier.height(97.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
             BoldTextComponent(value = "Create Account")
 
@@ -61,12 +76,15 @@ fun RegisterScreen(navController: NavController) {
 
             BasicButton(
                 label = "Sign up",
-                onClick = {}
+                onClick = {navController.navigate(Routes.LOGIN)}
             )
 
             Spacer(modifier = Modifier.height(29.dp))
 
-            NormalTextComponent(value = "Already have an account")
+            ClickableTextComponent(
+                value = "Already have an account",
+                onClick ={navController.navigate(Routes.LOGIN)}
+            )
         }
     }
 }
