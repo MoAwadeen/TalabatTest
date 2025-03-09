@@ -6,12 +6,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
@@ -22,6 +25,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
@@ -33,10 +39,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.lerp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
+import coil.size.Scale
 import test.compose.ui.theme.Bg
 import test.compose.ui.theme.Brown
 import test.compose.ui.theme.Orange
+import kotlin.math.absoluteValue
 
 @Composable
 fun BoldTextComponent(value: String) {
@@ -271,3 +282,48 @@ fun ShowAlertDialog() {
         )
     }
 }
+
+@Composable
+fun CardContext(index: Int, pagerState: PagerState, images: List<String>){
+
+    val pageOffset = (pagerState.currentPage - index) + pagerState.currentPageOffsetFraction
+
+    Card(
+        shape = RoundedCornerShape(10.dp),
+        modifier = Modifier.padding(2.dp).
+            graphicsLayer {
+            lerp(
+                start = 0.9f.dp,
+                stop = 1f.dp,
+                fraction = 1f - pageOffset.absoluteValue.coerceIn(0f,1f)
+            ).also{ scale ->
+                scaleX = scale.value
+                scaleY = scale.value
+            }
+                alpha = lerp(
+                    start = 0.65f.dp,
+                    stop = 1f.dp,
+                    fraction = 1f - pageOffset.absoluteValue.coerceIn(0f,1f)
+                ).value
+        }
+
+    ) {
+        AsyncImage(
+            modifier = Modifier.width(100.dp).height(100.dp),
+            model = ImageRequest.Builder(LocalContext.current).
+            data(images[index]).
+            crossfade(true).
+            scale(Scale.FILL).
+            build(),
+            contentDescription = "Image",
+            contentScale = ContentScale.Crop
+        )
+    }
+}
+
+@Preview
+@Composable
+fun CardContextPreview(){
+    //OutlinedTextFieldName(label = "Merna")
+}
+

@@ -75,7 +75,7 @@ fun LoginScreen(navController: NavController){
                     coroutineScope.launch {
                         authManager.SignInWithEmailAndPassword(email, password).collect { response ->
                             when (response) {
-                                is AuthResponse.Success -> navController.navigate(Routes.REGISTER)
+                                is AuthResponse.Success -> navController.navigate(Routes.HOME)
                                 is AuthResponse.Error -> errorMessage = response.message
                             }
                         }

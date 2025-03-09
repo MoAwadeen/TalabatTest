@@ -25,5 +25,9 @@ fun AppNavigationGraph(){
         composable(Routes.REGISTER) {
             RegisterScreen(navController = navController)
         }
+
+        composable(Routes.HOME) {
+            HomeScreen(navController = navController)
+        }
     }
 }
