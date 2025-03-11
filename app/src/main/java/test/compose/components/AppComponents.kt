@@ -85,12 +85,14 @@ fun OutlinedTextFieldEmail(label: String, text: String, onValueChange: (String) 
         onValueChange = onValueChange,  // Add this to update state
         placeholder = { Text(label) },
         singleLine = true,
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Bg),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
         colors = OutlinedTextFieldDefaults.colors(
-            focusedBorderColor = Color.Blue,
-            unfocusedBorderColor = Color.Gray,
-            cursorColor = Color.Blue
+            focusedBorderColor = Orange,
+            unfocusedBorderColor = Bg,
+            cursorColor = Orange
         )
     )
 }
@@ -102,13 +104,13 @@ fun OutlinedTextFieldPassword(label: String, text: String, onValueChange: (Strin
         onValueChange = onValueChange,  // Add this to update state
         placeholder = { Text(label) },
         singleLine = true,
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().background(Bg),
         visualTransformation = PasswordVisualTransformation(),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         colors = OutlinedTextFieldDefaults.colors(
-            focusedBorderColor = Color.Blue,
-            unfocusedBorderColor = Color.Gray,
-            cursorColor = Color.Blue
+            focusedBorderColor = Orange,
+            unfocusedBorderColor = Bg,
+            cursorColor = Orange
         )
     )
 }
@@ -310,10 +312,10 @@ fun CardContext(index: Int, pagerState: PagerState, images: List<String>){
     ) {
         AsyncImage(
             modifier = Modifier.width(100.dp).height(100.dp),
-            model = ImageRequest.Builder(LocalContext.current).
+            model = coil.request.ImageRequest.Builder(LocalContext.current).
             data(images[index]).
             crossfade(true).
-            scale(Scale.FILL).
+            scale(coil.size.Scale.FILL).
             build(),
             contentDescription = "Image",
             contentScale = ContentScale.Crop
