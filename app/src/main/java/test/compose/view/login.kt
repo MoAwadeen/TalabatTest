@@ -1,12 +1,16 @@
 package test.compose.view
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.content.MediaType.Companion.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -26,11 +30,13 @@ import test.compose.AuthenticationManager
 import test.compose.components.BasicButton
 import test.compose.components.BoldTextComponent
 import test.compose.components.ClickableTextComponent
+import test.compose.components.GoogleSignInButton
 import test.compose.components.NormalTextComponent
 import test.compose.components.OutlinedTextFieldEmail
 import test.compose.components.OutlinedTextFieldPassword
 import test.compose.components.ShowAlertDialog
 import test.compose.ui.theme.Bg
+import test.compose.ui.theme.Orange
 
 @Composable
 fun LoginScreen(navController: NavController){
@@ -45,6 +51,7 @@ fun LoginScreen(navController: NavController){
     Surface (
         modifier = Modifier.fillMaxWidth().background(Color.White).padding(28.dp),
         color = Color.White
+
     )
     {
         Column (modifier = Modifier.fillMaxSize()){
@@ -87,6 +94,9 @@ fun LoginScreen(navController: NavController){
                 value = "Create new account ?",
                 onClick = {navController.navigate(Routes.REGISTER)}
             )
+
+            GoogleSignInButton {  }
+
 
         }
 
