@@ -1,18 +1,9 @@
 package test.compose.view
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
@@ -20,20 +11,22 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import test.compose.components.BasicButton
-import test.compose.components.BoldTextComponent
-import test.compose.components.ClickableTextComponent
-import test.compose.components.DifferentSizeTextComponent
-import test.compose.components.OutlinedTextFieldConfirmPassword
-import test.compose.components.OutlinedTextFieldEmail
-import test.compose.components.OutlinedTextFieldName
-import test.compose.components.OutlinedTextFieldPasswordSignUp
+import kotlinx.coroutines.launch
+import test.compose.AuthResponse
+import test.compose.AuthenticationManager
+import test.compose.components.*
 import test.compose.ui.theme.Bg
 
 @Composable
 fun RegisterScreen(navController: NavController) {
+    var firstName by remember { mutableStateOf("") }
+    var lastName by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
+    var errorMessage by remember { mutableStateOf("") }
+    val coroutineScope = rememberCoroutineScope()
+    val authManager = AuthenticationManager()
 
     Surface(
         modifier = Modifier
@@ -54,15 +47,19 @@ fun RegisterScreen(navController: NavController) {
 
             Spacer(modifier = Modifier.height(36.dp))
 
-            OutlinedTextFieldName(label = "First name")
+            OutlinedTextFieldName(label = "First name", value = firstName, onValueChange = { firstName = it })
 
             Spacer(modifier = Modifier.height(29.dp))
 
-            OutlinedTextFieldName(label = "Last name")
+            OutlinedTextFieldName(label = "Last name", value = lastName, onValueChange = { lastName = it })
 
             Spacer(modifier = Modifier.height(29.dp))
 
-            OutlinedTextFieldEmail(label = "E-mail")
+            OutlinedTextFieldEmail(
+                label = "Email Address",
+                text = email,
+                onValueChange = { email = it }  // Ensure state updates
+            )
 
             Spacer(modifier = Modifier.height(29.dp))
 
@@ -70,20 +67,43 @@ fun RegisterScreen(navController: NavController) {
 
             Spacer(modifier = Modifier.height(29.dp))
 
-            OutlinedTextFieldConfirmPassword(label = "Confirm Password", password = password, confirmPassword = confirmPassword, onConfirmPasswordChange = { confirmPassword = it })
+            OutlinedTextFieldConfirmPassword(
+                label = "Confirm Password",
+                password = password,
+                confirmPassword = confirmPassword,
+                onConfirmPasswordChange = { confirmPassword = it }
+            )
+
+            if (errorMessage.isNotEmpty()) {
+                Spacer(modifier = Modifier.height(10.dp))
+                BoldTextComponent(value = errorMessage)
+            }
 
             Spacer(modifier = Modifier.height(29.dp))
 
             BasicButton(
                 label = "Sign up",
-                onClick = {navController.navigate(Routes.LOGIN)}
+                onClick = {
+                    coroutineScope.launch {
+                        authManager.CreateUserWithEmailAndPassword(email, password).collect { response ->
+                            when (response) {
+                                is AuthResponse.Success -> navController.navigate(Routes.LOGIN)
+                                is AuthResponse.Error -> errorMessage = response.message
+                            }
+                        }
+                    }
+                }
             )
 
             Spacer(modifier = Modifier.height(29.dp))
 
             ClickableTextComponent(
                 value = "Already have an account",
-                onClick ={navController.navigate(Routes.LOGIN)}
+                onClick = {
+                    if (navController.currentDestination?.route != Routes.LOGIN) {
+                        navController.navigate(Routes.LOGIN)
+                    }
+                }
             )
         }
     }

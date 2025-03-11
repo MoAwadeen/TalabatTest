@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "317228805162",
+    "project_id": "talabattest-72fc8",
+    "storage_bucket": "talabattest-72fc8.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:317228805162:android:dae7361243954e7eab2753",
+        "android_client_info": {
+          "package_name": "test.compose"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAVlsdArovQbZMcWhZpZhKjPai0oqw5caA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
