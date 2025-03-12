@@ -1,11 +1,8 @@
 package test.compose.view
 
-import android.widget.Space
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -25,14 +22,15 @@ import test.compose.components.BoldTextComponent
 import test.compose.components.CardContext
 
 @Composable
-fun HomeScreen(navController: NavController){
-
-    Surface (
-        modifier = Modifier.fillMaxWidth().background(Color.White).padding(28.dp),
+fun HomeScreen(navController: NavController) {
+    Surface(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
+            .padding(16.dp),
         color = Color.White
-    )
-    {
-        Column (modifier = Modifier.fillMaxSize()){
+    ) {
+        Column(modifier = Modifier.fillMaxSize()) {
 
             BoldTextComponent("Card Carousel")
 
@@ -40,13 +38,21 @@ fun HomeScreen(navController: NavController){
                 images.size
             }
 
-            HorizontalPager(state = pagerState,
-                contentPadding = PaddingValues(end = 240.dp)) { index ->
-                CardContext(index, pagerState, images)
+            HorizontalPager(
+                state = pagerState,
+                pageSize = androidx.compose.foundation.pager.PageSize.Fixed(140.dp),
+                contentPadding = PaddingValues(horizontal = 8.dp),
+                pageSpacing = 8.dp,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(160.dp)
+            ) { index ->
+                CardContext(index, pagerState, images, navController)
             }
         }
     }
 }
+
 
 val images = listOf(
     "https://www.w3schools.com/w3images/lights.jpg",
