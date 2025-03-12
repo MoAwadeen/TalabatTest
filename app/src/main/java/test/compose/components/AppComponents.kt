@@ -2,6 +2,7 @@ package test.compose.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
@@ -39,14 +40,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.lerp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.util.lerp
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import coil.size.Scale
 import test.compose.ui.theme.Bg
 import test.compose.ui.theme.Brown
 import test.compose.ui.theme.Orange
+import test.compose.view.Routes
 import kotlin.math.absoluteValue
 
 @Composable
@@ -284,46 +287,41 @@ fun ShowAlertDialog() {
 }
 
 @Composable
-fun CardContext(index: Int, pagerState: PagerState, images: List<String>){
-
+fun CardContext(index: Int, pagerState: PagerState, images: List<String>, navController: NavController) {
     val pageOffset = (pagerState.currentPage - index) + pagerState.currentPageOffsetFraction
 
     Card(
-        shape = RoundedCornerShape(10.dp),
-        modifier = Modifier.padding(2.dp).
-            graphicsLayer {
-            lerp(
-                start = 0.9f.dp,
-                stop = 1f.dp,
-                fraction = 1f - pageOffset.absoluteValue.coerceIn(0f,1f)
-            ).also{ scale ->
-                scaleX = scale.value
-                scaleY = scale.value
+        shape = RoundedCornerShape(12.dp),
+        modifier = Modifier
+            .width(140.dp)
+            .height(150.dp)
+            .clickable {
+                navController.navigate(Routes.SPLASH)
             }
+            .graphicsLayer {
+                /*
+                val scale = lerp(
+                    start = 0.85f,
+                    stop = 1f,
+                    fraction = 1f - pageOffset.absoluteValue.coerceIn(0f, 1f))
+                scaleX = scale
+                scaleY = scale
+                 */
                 alpha = lerp(
-                    start = 0.65f.dp,
-                    stop = 1f.dp,
-                    fraction = 1f - pageOffset.absoluteValue.coerceIn(0f,1f)
-                ).value
-        }
-
-    ) {
+                    start = 0.8f,
+                    stop = 1f,
+                    fraction = 1f - pageOffset.absoluteValue.coerceIn(0f, 1f))
+            }) {
         AsyncImage(
-            modifier = Modifier.width(100.dp).height(100.dp),
-            model = ImageRequest.Builder(LocalContext.current).
-            data(images[index]).
-            crossfade(true).
-            scale(Scale.FILL).
-            build(),
+            modifier = Modifier.fillMaxSize(),
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(images[index])
+                .crossfade(true)
+                .scale(Scale.FILL)
+                .build(),
             contentDescription = "Image",
             contentScale = ContentScale.Crop
         )
     }
-}
-
-@Preview
-@Composable
-fun CardContextPreview(){
-    //OutlinedTextFieldName(label = "Merna")
 }
 
