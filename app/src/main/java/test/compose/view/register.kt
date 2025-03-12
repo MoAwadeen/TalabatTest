@@ -41,19 +41,19 @@ fun RegisterScreen(navController: NavController) {
             BoldTextComponent(value = "Create Account")
 
             DifferentSizeTextComponent(
-                value = "Create an account so you can explore all the\nexisting jobs",
+                value = "Create an account so you can explore \nall the existing jobs",
                 size = 16.sp
             )
 
-            Spacer(modifier = Modifier.height(36.dp))
+            Spacer(modifier = Modifier.height(14.dp))
 
             OutlinedTextFieldName(label = "First name", value = firstName, onValueChange = { firstName = it })
 
-            Spacer(modifier = Modifier.height(29.dp))
+            Spacer(modifier = Modifier.height(14.dp))
 
             OutlinedTextFieldName(label = "Last name", value = lastName, onValueChange = { lastName = it })
 
-            Spacer(modifier = Modifier.height(29.dp))
+            Spacer(modifier = Modifier.height(14.dp))
 
             OutlinedTextFieldEmail(
                 label = "Email Address",
@@ -61,11 +61,11 @@ fun RegisterScreen(navController: NavController) {
                 onValueChange = { email = it }  // Ensure state updates
             )
 
-            Spacer(modifier = Modifier.height(29.dp))
+            Spacer(modifier = Modifier.height(14.dp))
 
             OutlinedTextFieldPasswordSignUp(label = "Password", password = password, onPasswordChange = { password = it })
 
-            Spacer(modifier = Modifier.height(29.dp))
+            Spacer(modifier = Modifier.height(14.dp))
 
             OutlinedTextFieldConfirmPassword(
                 label = "Confirm Password",
@@ -79,7 +79,7 @@ fun RegisterScreen(navController: NavController) {
                 BoldTextComponent(value = errorMessage)
             }
 
-            Spacer(modifier = Modifier.height(29.dp))
+            Spacer(modifier = Modifier.height(14.dp))
 
             BasicButton(
                 label = "Sign up",
@@ -95,7 +95,7 @@ fun RegisterScreen(navController: NavController) {
                 }
             )
 
-            Spacer(modifier = Modifier.height(29.dp))
+            Spacer(modifier = Modifier.height(14.dp))
 
             ClickableTextComponent(
                 value = "Already have an account",
@@ -105,6 +105,7 @@ fun RegisterScreen(navController: NavController) {
                     }
                 }
             )
+            GoogleSignInButton {  }
         }
     }
 }
