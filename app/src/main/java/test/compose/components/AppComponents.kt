@@ -1,6 +1,7 @@
 package test.compose.components
 
 import androidx.compose.foundation.Image
+import android.graphics.drawable.Icon
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -23,9 +24,13 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -62,6 +67,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.painterResource
 import test.compose.R
 
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.material3.IconButton
 
 @Composable
 fun BoldTextComponent(value: String) {
@@ -76,7 +84,6 @@ fun BoldTextComponent(value: String) {
         textAlign = TextAlign.Center
     )
 }
-
 
 @Composable
 fun NormalTextComponent(value: String) {
@@ -184,7 +191,6 @@ fun OutlinedTextFieldName(
         )
     )
 }
-
 
 @Preview
 @Composable
@@ -384,3 +390,64 @@ fun GoogleSignInButtonPreview() {
     GoogleSignInButton(onClick = {})
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AppToolbar(toolbarTitle: String) {
+    TopAppBar(
+        modifier = Modifier.fillMaxWidth().height(80.dp),
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = Orange,
+            titleContentColor = Color.White,
+        ),
+        title = {
+            Text(
+                text = toolbarTitle,
+                modifier = Modifier.fillMaxWidth().heightIn(min = 50.dp),
+                style = TextStyle(
+                    fontSize = 30.sp,
+                    fontWeight = FontWeight.Bold,
+                    fontStyle = FontStyle.Normal)
+            )
+        }
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun HomeAppToolbar(toolbarTitle: String, userName: String) {
+    TopAppBar(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(80.dp),
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = Orange,
+            titleContentColor = Color.White,
+        ),
+        title = {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = toolbarTitle,
+                    style = TextStyle(
+                        fontSize = 30.sp,
+                        fontWeight = FontWeight.Bold,
+                        fontStyle = FontStyle.Normal
+                    )
+                )
+                Text(
+                    text = "Hi, $userName 👋",
+                    style = TextStyle(
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = Color.White
+                    ),
+                    modifier = Modifier
+                        .padding(end = 8.dp)
+                )
+            }
+        }
+    )
+}
