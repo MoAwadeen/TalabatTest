@@ -66,4 +66,8 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:33.10.0"))
     implementation("com.google.firebase:firebase-auth")
     implementation("io.coil-kt:coil-compose:2.6.0")
+    implementation ("androidx.compose.material:material-icons-core:1.5.4")
+    implementation ("androidx.compose.material:material-icons-extended:1.5.4")
+    implementation ("com.google.firebase:firebase-firestore:24.9.1")
+    implementation ("com.google.firebase:firebase-storage:20.3.0")
 }

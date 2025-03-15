@@ -1,13 +1,13 @@
 package test.compose.components
 
 import androidx.compose.foundation.Image
-import android.graphics.drawable.Icon
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.content.MediaType.Companion.Image
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
@@ -15,32 +15,41 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.PagerState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
-import androidx.compose.material3.Icon
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -54,21 +63,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.lerp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import coil.size.Scale
+import test.compose.R
 import test.compose.ui.theme.Bg
 import test.compose.ui.theme.Brown
 import test.compose.ui.theme.Orange
 import test.compose.view.Routes
 import kotlin.math.absoluteValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.res.painterResource
-import test.compose.R
-
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.material3.IconButton
 
 @Composable
 fun BoldTextComponent(value: String) {
@@ -143,7 +147,7 @@ fun BasicButton(label: String, onClick: () -> Unit, ){
         modifier = Modifier.fillMaxWidth().height(60.dp),
         shape = RoundedCornerShape(100.dp))
     {
-        Text(label, fontSize = 20.sp, color = Color.White , fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold)
+        Text(label, fontSize = 20.sp, color = Color.White , fontWeight = FontWeight.SemiBold)
 
 
     }
@@ -168,6 +172,7 @@ fun DifferentSizeTextComponent(value: String, size: TextUnit) {
 fun DifferentSizeTextComponentPreview(){
     DifferentSizeTextComponent(value = "Hello" , size = 20.sp)
 }
+
 @Composable
 fun OutlinedTextFieldName(
     label: String,
@@ -343,11 +348,6 @@ fun CardContext(index: Int, pagerState: PagerState, images: List<String>, navCon
     }
 }
 
-@Preview
-@Composable
-fun CardContextPreview(){
-    //OutlinedTextFieldName(label = "Merna")
-}
 @Composable
 fun GoogleSignInButton(onClick: () -> Unit,) {
 
@@ -382,7 +382,6 @@ fun GoogleSignInButton(onClick: () -> Unit,) {
     }
 }
 
-
 @Preview
 @Composable
 fun GoogleSignInButtonPreview() {
@@ -393,7 +392,7 @@ fun GoogleSignInButtonPreview() {
 @Composable
 fun AppToolbar(toolbarTitle: String) {
     TopAppBar(
-        modifier = Modifier.fillMaxWidth().height(80.dp),
+        modifier = Modifier.fillMaxWidth().height(90.dp),
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = Orange,
             titleContentColor = Color.White,
@@ -415,18 +414,16 @@ fun AppToolbar(toolbarTitle: String) {
 @Composable
 fun HomeAppToolbar(toolbarTitle: String, userName: String) {
     TopAppBar(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(80.dp),
+        modifier = Modifier.fillMaxWidth().height(90.dp),
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = Orange,
             titleContentColor = Color.White,
         ),
         title = {
             Row(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
                     text = toolbarTitle,
@@ -443,10 +440,125 @@ fun HomeAppToolbar(toolbarTitle: String, userName: String) {
                         fontWeight = FontWeight.SemiBold,
                         color = Color.White
                     ),
-                    modifier = Modifier
-                        .padding(end = 8.dp)
+                    modifier = Modifier.padding(end = 8.dp)
                 )
             }
         }
     )
+}
+
+@Composable
+fun BottomAppBar(navController: NavController, currentRoute: String?) {
+    BottomAppBar(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(80.dp),
+        containerColor = Orange,
+        contentColor = Color.White,
+        tonalElevation = 8.dp,
+        actions = {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.Top
+            ) {
+                Column(
+                    verticalArrangement = Arrangement.Top,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    IconButton(onClick = { navController.navigate(Routes.HOME) }) {
+                        Icon(
+                            Icons.Filled.Home,
+                            contentDescription = "Home",
+                            modifier = Modifier.size(24.dp)
+                        )
+                    }
+                    if (currentRoute == Routes.HOME) {
+                        Text(
+                            text = "Home",
+                            style = TextStyle(
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.SemiBold,
+                                color = Color.White
+                            ),
+                            textAlign = TextAlign.Center
+                        )
+                    }
+                }
+                Column(
+                    verticalArrangement = Arrangement.Top,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    IconButton(onClick = { navController.navigate(Routes.SPLASH) }) {
+                        Icon(
+                            Icons.Filled.FavoriteBorder,
+                            contentDescription = "Favorites",
+                            modifier = Modifier.size(24.dp)
+                        )
+                    }
+                    if (currentRoute == Routes.SPLASH) {
+                        Text(
+                            text = "Favorites",
+                            style = TextStyle(
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.SemiBold,
+                                color = Color.White
+                            ),
+                            textAlign = TextAlign.Center
+                        )
+                    }
+                }
+                Column(
+                    verticalArrangement = Arrangement.Top,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    IconButton(onClick = { navController.navigate(Routes.PROFILE) }) {
+                        Icon(
+                            Icons.Filled.AccountCircle,
+                            contentDescription = "Account",
+                            modifier = Modifier.size(24.dp)
+                        )
+                    }
+                    if (currentRoute == Routes.PROFILE) {
+                        Text(
+                            text = "Account",
+                            style = TextStyle(
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.SemiBold,
+                                color = Color.White
+                            ),
+                            textAlign = TextAlign.Center
+                        )
+                    }
+                }
+            }
+        }
+    )
+}
+
+@Preview
+@Composable
+fun BottomAppBarPreview() {
+    val navController = rememberNavController()
+    val currentRoute = Routes.HOME
+    BottomAppBar(navController = navController, currentRoute = currentRoute)
+}
+
+@Composable
+fun ProfileImage(selectedImageUri: Any?, onClick: () -> Unit) {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        AsyncImage(
+            modifier = Modifier.size(80.dp).clip(CircleShape)
+                .clickable { onClick() },
+            model = selectedImageUri ?: Icon(Icons.Filled.AccountCircle,
+                contentDescription = "Profile",
+                modifier = Modifier.size(80.dp),
+            ),
+            contentDescription = "Profile Photo",
+            contentScale = ContentScale.Crop
+        )
+    }
 }
