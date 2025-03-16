@@ -11,14 +11,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.launch
 import test.compose.AuthResponse
 import test.compose.AuthenticationManager
 import test.compose.components.*
-import test.compose.ui.theme.Bg
 
 @Composable
-fun RegisterScreen(navController: NavController) {
+fun RegisterScreen(navController: NavController?) {
     var firstName by remember { mutableStateOf("") }
     var lastName by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
@@ -27,6 +28,7 @@ fun RegisterScreen(navController: NavController) {
     var errorMessage by remember { mutableStateOf("") }
     val coroutineScope = rememberCoroutineScope()
     val authManager = AuthenticationManager()
+    val auth = FirebaseAuth.getInstance()
 
     Surface(
         modifier = Modifier
@@ -58,7 +60,7 @@ fun RegisterScreen(navController: NavController) {
             OutlinedTextFieldEmail(
                 label = "Email Address",
                 text = email,
-                onValueChange = { email = it }  // Ensure state updates
+                onValueChange = { email = it }
             )
 
             Spacer(modifier = Modifier.height(14.dp))
@@ -84,10 +86,25 @@ fun RegisterScreen(navController: NavController) {
             BasicButton(
                 label = "Sign up",
                 onClick = {
+                    if (password != confirmPassword) {
+                        errorMessage = "Passwords do not match!"
+                        return@BasicButton
+                    }
+                    if (email.isBlank() || password.isBlank()) {
+                        errorMessage = "Email and password cannot be empty"
+                        return@BasicButton
+                    }
+
                     coroutineScope.launch {
                         authManager.CreateUserWithEmailAndPassword(email, password).collect { response ->
                             when (response) {
-                                is AuthResponse.Success -> navController.navigate(Routes.LOGIN)
+                                is AuthResponse.Success -> {
+                                    val userId = auth.currentUser?.uid
+                                    if (userId != null) {
+                                        saveUserDataToFireStore(userId, firstName, lastName, email)
+                                        navController?.navigate(Routes.LOGIN)
+                                    }
+                                }
                                 is AuthResponse.Error -> errorMessage = response.message
                             }
                         }
@@ -100,21 +117,45 @@ fun RegisterScreen(navController: NavController) {
             ClickableTextComponent(
                 value = "Already have an account",
                 onClick = {
-                    if (navController.currentDestination?.route != Routes.LOGIN) {
-                        navController.navigate(Routes.LOGIN)
+                    navController?.let {
+                        if (it.currentDestination?.route != Routes.LOGIN) {
+                            it.navigate(Routes.LOGIN)
+                        }
+                    } ?: run {
+                        errorMessage = "Navigation error: navController is null"
                     }
                 }
             )
-            GoogleSignInButton {  }
+
+            GoogleSignInButton {
+                // Handle Google Sign-In logic here
+            }
         }
     }
+}
+
+private fun saveUserDataToFireStore(userId: String, firstName: String, lastName: String, email: String) {
+    val firestore = FirebaseFirestore.getInstance()
+    val userData = hashMapOf(
+        "firstName" to firstName,
+        "lastName" to lastName,
+        "email" to email
+    )
+
+    firestore.collection("users").document(userId)
+        .set(userData)
+        .addOnSuccessListener {
+            println("User data saved successfully")
+        }
+        .addOnFailureListener { e ->
+            println("Error saving user data: $e") }
 }
 
 @Preview
 @Composable
 fun RegisterScreenPreview() {
     Surface(
-        modifier = Modifier.fillMaxSize().background(Bg),
+        modifier = Modifier.fillMaxSize().background(Color.White),
     ) {
         RegisterScreen(rememberNavController())
     }
