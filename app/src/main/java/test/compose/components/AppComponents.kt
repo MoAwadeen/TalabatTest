@@ -45,6 +45,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -107,7 +108,7 @@ fun OutlinedTextFieldEmail(label: String, text: String, onValueChange: (String) 
     OutlinedTextField(
         value = text,
         onValueChange = onValueChange,  // Add this to update state
-        placeholder = { Text(label) },
+        placeholder = { Text(label, color = Orange) },
         singleLine = true,
         modifier = Modifier
             .fillMaxWidth()
@@ -126,7 +127,7 @@ fun OutlinedTextFieldPassword(label: String, text: String, onValueChange: (Strin
     OutlinedTextField(
         value = text,
         onValueChange = onValueChange,  // Add this to update state
-        placeholder = { Text(label) },
+        placeholder = { Text(label, color = Orange) },
         singleLine = true,
         modifier = Modifier.fillMaxWidth().background(Bg),
         visualTransformation = PasswordVisualTransformation(),
@@ -182,7 +183,7 @@ fun OutlinedTextFieldName(
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
-        label = { Text(label) },
+        label = { Text(label, color = Orange) },
         singleLine = true,
         modifier = Modifier
             .fillMaxWidth()
@@ -207,7 +208,7 @@ fun OutlinedTextFieldPasswordSignUp(label: String, password: String, onPasswordC
     OutlinedTextField(
         value = password,
         onValueChange = onPasswordChange,
-        placeholder = { Text(label) },
+        placeholder = { Text(label, color = Orange) },
         singleLine = true,
         modifier = Modifier.fillMaxWidth().background(Bg),
         visualTransformation = PasswordVisualTransformation(),
@@ -229,7 +230,7 @@ fun OutlinedTextFieldConfirmPassword(label: String, password: String, confirmPas
     OutlinedTextField(
         value = confirmPassword,
         onValueChange = onConfirmPasswordChange,
-        placeholder = { Text(label) },
+        placeholder = { Text(label, color = Orange) },
         singleLine = true,
         modifier = Modifier.fillMaxWidth().background(Bg),
         isError = isError,
@@ -545,20 +546,23 @@ fun BottomAppBarPreview() {
 }
 
 @Composable
-fun ProfileImage(selectedImageUri: Any?, onClick: () -> Unit) {
+fun ProfileImage(selectedImage: ImageBitmap?, onClick: () -> Unit) {
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        AsyncImage(
-            modifier = Modifier.size(80.dp).clip(CircleShape)
-                .clickable { onClick() },
-            model = selectedImageUri ?: Icon(Icons.Filled.AccountCircle,
-                contentDescription = "Profile",
-                modifier = Modifier.size(80.dp),
-            ),
-            contentDescription = "Profile Photo",
-            contentScale = ContentScale.Crop
-        )
-    }
+        if (selectedImage != null) {
+            Image(
+                bitmap = selectedImage,
+                contentDescription = "Profile Image",
+                modifier = Modifier.size(80.dp).clip(CircleShape).clickable { onClick() }, contentScale = ContentScale.Crop)
+        } else {
+            Icon(
+                imageVector = Icons.Filled.AccountCircle,
+                contentDescription = "Default Profile Image",
+                modifier = Modifier
+                    .size(80.dp)
+                    .clip(CircleShape)
+                    .clickable { onClick() })
+        } }
 }
