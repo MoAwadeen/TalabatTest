@@ -2,15 +2,18 @@ package test.compose.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -20,9 +23,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
@@ -47,6 +53,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
@@ -66,6 +74,7 @@ import androidx.compose.ui.util.lerp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
+import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Scale
 import test.compose.R
@@ -141,16 +150,13 @@ fun OutlinedTextFieldPassword(label: String, text: String, onValueChange: (Strin
 }
 
 @Composable
-fun BasicButton(label: String, onClick: () -> Unit, ){
-
+fun BasicButton(label: String, onClick: () -> Unit ){
     Button(onClick = { onClick() },
         colors = ButtonDefaults.buttonColors(containerColor = Orange),
         modifier = Modifier.fillMaxWidth().height(60.dp),
         shape = RoundedCornerShape(100.dp))
     {
         Text(label, fontSize = 20.sp, color = Color.White , fontWeight = FontWeight.SemiBold)
-
-
     }
 }
 
@@ -311,7 +317,7 @@ fun ShowAlertDialog() {
 }
 
 @Composable
-fun CardContext(index: Int, pagerState: PagerState, images: List<String>, navController: NavController) {
+fun ImageCardContext(index: Int, pagerState: PagerState, images: List<String>, onClick: List<() -> Unit>) {
     val pageOffset = (pagerState.currentPage - index) + pagerState.currentPageOffsetFraction
 
     Card(
@@ -320,17 +326,9 @@ fun CardContext(index: Int, pagerState: PagerState, images: List<String>, navCon
             .width(140.dp)
             .height(150.dp)
             .clickable {
-                navController.navigate(Routes.SPLASH)
+                onClick[index]()
             }
             .graphicsLayer {
-                /*
-                val scale = lerp(
-                    start = 0.85f,
-                    stop = 1f,
-                    fraction = 1f - pageOffset.absoluteValue.coerceIn(0f, 1f))
-                scaleX = scale
-                scaleY = scale
-                 */
                 alpha = lerp(
                     start = 0.8f,
                     stop = 1f,
@@ -350,7 +348,7 @@ fun CardContext(index: Int, pagerState: PagerState, images: List<String>, navCon
 }
 
 @Composable
-fun GoogleSignInButton(onClick: () -> Unit,) {
+fun GoogleSignInButton(onClick: () -> Unit) {
 
     Button(
         colors = ButtonDefaults.buttonColors(containerColor = Bg),
@@ -393,7 +391,7 @@ fun GoogleSignInButtonPreview() {
 @Composable
 fun AppToolbar(toolbarTitle: String) {
     TopAppBar(
-        modifier = Modifier.fillMaxWidth().height(90.dp),
+        modifier = Modifier.fillMaxWidth().height(40.dp),
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = Orange,
             titleContentColor = Color.White,
@@ -401,7 +399,7 @@ fun AppToolbar(toolbarTitle: String) {
         title = {
             Text(
                 text = toolbarTitle,
-                modifier = Modifier.fillMaxWidth().heightIn(min = 50.dp),
+                modifier = Modifier.fillMaxWidth(),
                 style = TextStyle(
                     fontSize = 30.sp,
                     fontWeight = FontWeight.Bold,
@@ -451,15 +449,13 @@ fun HomeAppToolbar(toolbarTitle: String, userName: String) {
 @Composable
 fun BottomAppBar(navController: NavController, currentRoute: String?) {
     BottomAppBar(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(80.dp),
+        modifier = Modifier.fillMaxWidth().height(60.dp),
         containerColor = Orange,
         contentColor = Color.White,
         tonalElevation = 8.dp,
         actions = {
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxSize().align(Alignment.Top).padding(4.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.Top
             ) {
@@ -467,7 +463,7 @@ fun BottomAppBar(navController: NavController, currentRoute: String?) {
                     verticalArrangement = Arrangement.Top,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    IconButton(onClick = { navController.navigate(Routes.HOME) }) {
+                    IconButton(modifier = Modifier.size(24.dp), onClick = { navController.navigate(Routes.HOME) }) {
                         Icon(
                             Icons.Filled.Home,
                             contentDescription = "Home",
@@ -490,7 +486,7 @@ fun BottomAppBar(navController: NavController, currentRoute: String?) {
                     verticalArrangement = Arrangement.Top,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    IconButton(onClick = { navController.navigate(Routes.SPLASH) }) {
+                    IconButton(modifier = Modifier.size(24.dp), onClick = { navController.navigate(Routes.SPLASH) }) {
                         Icon(
                             Icons.Filled.FavoriteBorder,
                             contentDescription = "Favorites",
@@ -513,7 +509,7 @@ fun BottomAppBar(navController: NavController, currentRoute: String?) {
                     verticalArrangement = Arrangement.Top,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    IconButton(onClick = { navController.navigate(Routes.PROFILE) }) {
+                    IconButton(modifier = Modifier.size(24.dp), onClick = { navController.navigate(Routes.PROFILE) }) {
                         Icon(
                             Icons.Filled.AccountCircle,
                             contentDescription = "Account",
@@ -548,14 +544,16 @@ fun BottomAppBarPreview() {
 @Composable
 fun ProfileImage(selectedImage: ImageBitmap?, onClick: () -> Unit) {
     Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
+        modifier = Modifier.fillMaxWidth().background(Orange).height(100.dp).offset(y = 40.dp)
+        , contentAlignment = Alignment.BottomCenter
     ) {
         if (selectedImage != null) {
             Image(
                 bitmap = selectedImage,
                 contentDescription = "Profile Image",
-                modifier = Modifier.size(80.dp).clip(CircleShape).clickable { onClick() }, contentScale = ContentScale.Crop)
+                modifier = Modifier.size(80.dp).clip(CircleShape).clickable { onClick() }
+                    .border(4.dp, Orange,RoundedCornerShape(100.dp))
+                , contentScale = ContentScale.Crop)
         } else {
             Icon(
                 imageVector = Icons.Filled.AccountCircle,
@@ -563,6 +561,391 @@ fun ProfileImage(selectedImage: ImageBitmap?, onClick: () -> Unit) {
                 modifier = Modifier
                     .size(80.dp)
                     .clip(CircleShape)
+                    .border(4.dp, Orange,RoundedCornerShape(100.dp))
                     .clickable { onClick() })
         } }
+}
+
+@Composable
+fun LogOutButton(onClick: () -> Unit) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 15.dp, vertical = 5.dp)
+    ) {
+        Button(
+            onClick = { onClick() },
+            colors = ButtonDefaults.buttonColors(containerColor = Color.White),
+            modifier = Modifier.fillMaxWidth().height(60.dp).border(4.dp, Orange, RoundedCornerShape(100.dp)),
+            shape = RoundedCornerShape(100.dp)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxSize(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    Icons.AutoMirrored.Filled.Logout,
+                    contentDescription = "Log Out",
+                    modifier = Modifier.size(20.dp),
+                    tint = Orange
+                )
+
+                Spacer(modifier = Modifier.size(8.dp))
+
+                Text(
+                    text = "Log Out",
+                    fontSize = 20.sp,
+                    color = Orange,
+                    fontWeight = FontWeight.SemiBold
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun TwoItemsRow(icon: ImageVector, label: String) {
+    Row(modifier = Modifier.fillMaxWidth().padding(start = 30.dp, end = 10.dp),
+        verticalAlignment = Alignment.CenterVertically)
+    {
+        Icon(
+            icon,
+            contentDescription = "Icon Description",
+            modifier = Modifier.size(20.dp),
+            tint = Orange
+        )
+
+        Spacer(modifier = Modifier.width(14.dp))
+
+        Text(
+            text = label,
+            fontSize = 18.sp,
+            color = Orange,
+            fontWeight = FontWeight.Normal
+        )
+    }
+}
+
+@Composable
+fun ThreeItemsRow(icon: ImageVector, label: String, text: String) {
+    Row(modifier = Modifier.fillMaxWidth().padding(start = 30.dp, end = 20.dp),
+        verticalAlignment = Alignment.CenterVertically)
+    {
+        Icon(
+            icon,
+            contentDescription = "Icon Description",
+            modifier = Modifier.size(20.dp),
+            tint = Orange
+        )
+
+        Spacer(modifier = Modifier.width(18.dp))
+
+        Text(
+            text = label,
+            fontSize = 20.sp,
+            color = Orange,
+            fontWeight = FontWeight.Normal,
+            modifier = Modifier.weight(1f)
+        )
+
+        Text(
+            text = text,
+            fontSize = 16.sp,
+            color = Orange,
+            fontWeight = FontWeight.Normal
+        )
+    }
+}
+
+@Composable
+fun UserResultsButton(label: String) {
+    Row {
+        Button(onClick = { },
+            colors = ButtonDefaults.buttonColors(containerColor = Orange),
+            modifier = Modifier.fillMaxWidth().height(40.dp),
+            shape = RoundedCornerShape(100.dp))
+        {
+            Text(label, fontSize = 14.sp, color = Color.White , fontWeight = FontWeight.Normal)
+        }
+
+        Spacer(modifier = Modifier.width(2.dp))
+    }
+}
+
+@Composable
+fun NewsBox(imageUrl: String) {
+    Box(
+        modifier = Modifier.fillMaxWidth()
+            .clip(RoundedCornerShape(16.dp))
+            .background(Orange)
+            .padding(10.dp)
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.Start
+        ) {
+            Text(
+                text = "The Spotlight !!",
+                style = TextStyle(
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    fontStyle = FontStyle.Normal,
+                    color = Color.White
+                )
+            )
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            val painter: Painter = rememberAsyncImagePainter(model = imageUrl)
+
+            Image(
+                painter = painter,
+                contentDescription = "News Image",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxWidth().height(120.dp).clip(RoundedCornerShape(16.dp))
+            )
+        }
+    }
+}
+
+@Composable
+fun ImageTextCardContext(index: Int,
+                         pagerState: PagerState,
+                         images: List<String>,
+                         text: List<String>,
+                         onClick: List<() -> Unit>) {
+    val pageOffset = (pagerState.currentPage - index) + pagerState.currentPageOffsetFraction
+
+    Card(
+        shape = RoundedCornerShape(12.dp),
+        modifier = Modifier
+            .width(140.dp)
+            .height(160.dp)
+            .background(Color.White)
+            .clickable {
+                onClick[index]()
+            }
+            .graphicsLayer {
+                alpha = lerp(
+                    start = 0.8f,
+                    stop = 1f,
+                    fraction = 1f - pageOffset.absoluteValue.coerceIn(0f, 1f)
+                )
+            }
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize().padding(8.dp).background(Color.White),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            AsyncImage(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(100.dp)
+                    .weight(1f)
+                    .clip(RoundedCornerShape(8.dp)),
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(images[index])
+                    .crossfade(true)
+                    .scale(Scale.FILL)
+                    .build(),
+                contentDescription = "Image",
+                contentScale = ContentScale.Crop
+            )
+
+            text[index].split(",").forEach { item ->
+                Text(
+                    text = item.trim(),
+                    fontSize = 16.sp,
+                    color = Orange,
+                    fontWeight = FontWeight.SemiBold,
+                    maxLines = 1
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun TwoTextsRow(text1: String, text2: String, onClick: () -> Unit) {
+    Row(modifier = Modifier.fillMaxWidth().padding(start = 5.dp, end = 10.dp),
+        verticalAlignment = Alignment.CenterVertically)
+    {
+        Text(
+            text = text1,
+            fontSize = 20.sp,
+            color = Orange,
+            fontWeight = FontWeight.SemiBold,
+            modifier = Modifier.weight(1f)
+        )
+
+        Text(
+            text = text2,
+            fontSize = 18.sp,
+            color = Color.Yellow,
+            fontWeight = FontWeight.Normal,
+            modifier = Modifier.clickable { onClick() }
+        )
+    }
+}
+
+@Composable
+fun ImageTwoTextCardContext(index: Int,
+                            pagerState: PagerState,
+                            images: List<String>,
+                            text1: List<String>,
+                            text2: List<String>,
+                            onClick: List<() -> Unit>) {
+    val pageOffset = (pagerState.currentPage - index) + pagerState.currentPageOffsetFraction
+
+    Card(
+        shape = RoundedCornerShape(12.dp),
+        modifier = Modifier
+            .width(140.dp)
+            .height(200.dp)
+            .background(Color.White)
+            .clickable {
+                onClick[index]()
+            }
+            .graphicsLayer {
+                alpha = lerp(
+                    start = 0.8f,
+                    stop = 1f,
+                    fraction = 1f - pageOffset.absoluteValue.coerceIn(0f, 1f)
+                )
+            }
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize().padding(8.dp).background(Color.White)
+        ) {
+            AsyncImage(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(120.dp)
+                    .weight(1f)
+                    .clip(RoundedCornerShape(8.dp)),
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(images[index])
+                    .crossfade(true)
+                    .scale(Scale.FILL)
+                    .build(),
+                contentDescription = "Image",
+                contentScale = ContentScale.Crop
+            )
+
+            text1[index].split(",").forEach { item ->
+                Text(
+                    text = item.trim(),
+                    fontSize = 16.sp,
+                    color = Orange,
+                    fontWeight = FontWeight.SemiBold,
+                    maxLines = 1
+                )
+            }
+
+            text2[index].split(",").forEach { item ->
+                Text(
+                    text = item.trim(),
+                    fontSize = 16.sp,
+                    color = Orange,
+                    fontWeight = FontWeight.SemiBold,
+                    maxLines = 1
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun FavoriteCardContext(
+    index: Int,
+    pagerState: PagerState,
+    images: List<String>,
+    text1: List<String>,
+    text2: List<String>,
+    onClick: List<() -> Unit>,
+    isFavorite: Boolean,
+    onFavoriteClick: (Boolean) -> Unit
+) {
+    val pageOffset = (pagerState.currentPage - index) + pagerState.currentPageOffsetFraction
+
+    Card(
+        shape = RoundedCornerShape(12.dp),
+        modifier = Modifier
+            .width(140.dp)
+            .height(200.dp)
+            .background(Color.White)
+            .clickable {
+                onClick[index]()
+            }
+            .graphicsLayer {
+                alpha = lerp(
+                    start = 0.8f,
+                    stop = 1f,
+                    fraction = 1f - pageOffset.absoluteValue.coerceIn(0f, 1f)
+                )
+            }
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(8.dp)
+                .background(Color.White)
+        ) {
+            AsyncImage(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(120.dp)
+                    .clip(RoundedCornerShape(8.dp)),
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(images[index])
+                    .crossfade(true)
+                    .scale(Scale.FILL)
+                    .build(),
+                contentDescription = "Image",
+                contentScale = ContentScale.Crop
+            )
+
+            IconButton(
+                onClick = { onFavoriteClick(!isFavorite) },
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(4.dp)
+                    .size(24.dp)
+            ) {
+                Icon(
+                    imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+                    contentDescription = "Favorite",
+                    modifier = Modifier.size(24.dp),
+                    tint = if (isFavorite) Color.Red else Color.Red
+                )
+            }
+
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = 130.dp)
+            ) {
+                text1[index].split(",").forEach { item ->
+                    Text(
+                        text = item.trim(),
+                        fontSize = 16.sp,
+                        color = Orange,
+                        fontWeight = FontWeight.SemiBold,
+                        maxLines = 1
+                    )
+                }
+
+                text2[index].split(",").forEach { item ->
+                    Text(
+                        text = item.trim(),
+                        fontSize = 16.sp,
+                        color = Orange,
+                        fontWeight = FontWeight.SemiBold,
+                        maxLines = 1
+                    )
+                }
+            }
+        }
+    }
 }
