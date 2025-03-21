@@ -25,7 +25,6 @@ import androidx.compose.material.icons.automirrored.filled.VolumeUp
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Flag
 import androidx.compose.material.icons.filled.GTranslate
-import androidx.compose.material.icons.filled.GroupAdd
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.PersonAddAlt
 import androidx.compose.material.icons.filled.Redeem

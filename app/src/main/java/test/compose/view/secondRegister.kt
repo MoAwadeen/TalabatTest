@@ -21,7 +21,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.google.firebase.auth.FirebaseAuth
@@ -29,7 +28,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import test.compose.AuthenticationManager
 import test.compose.components.BasicButton
 import test.compose.components.BoldTextComponent
-import test.compose.components.DifferentSizeTextComponent
 import test.compose.components.TwoItemsRow
 
 @Composable
