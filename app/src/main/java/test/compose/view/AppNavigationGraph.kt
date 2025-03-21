@@ -33,5 +33,13 @@ fun AppNavigationGraph(){
         composable(Routes.PROFILE) {
             ProfileScreen(navController = navController)
         }
+
+        composable(Routes.RESULTS) {
+            ResultsScreen(navController = navController)
+        }
+
+        composable(Routes.SECOND_REGISTER) {
+            SecondRegisterScreen(navController = navController)
+        }
     }
 }

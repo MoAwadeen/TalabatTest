@@ -7,5 +7,7 @@ object Routes {
     const val REGISTER = "REGISTER"
     const val HOME = "HOME"
     const val PROFILE = "PROFILE"
+    const val RESULTS = "RESULTS"
+    const val SECOND_REGISTER = "SECOND_REGISTER"
 
 }

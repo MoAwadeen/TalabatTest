@@ -1,9 +1,19 @@
 package test.compose.view
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
@@ -16,7 +26,15 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.launch
 import test.compose.AuthResponse
 import test.compose.AuthenticationManager
-import test.compose.components.*
+import test.compose.components.BasicButton
+import test.compose.components.BoldTextComponent
+import test.compose.components.ClickableTextComponent
+import test.compose.components.DifferentSizeTextComponent
+import test.compose.components.GoogleSignInButton
+import test.compose.components.OutlinedTextFieldConfirmPassword
+import test.compose.components.OutlinedTextFieldEmail
+import test.compose.components.OutlinedTextFieldName
+import test.compose.components.OutlinedTextFieldPasswordSignUp
 
 @Composable
 fun RegisterScreen(navController: NavController?) {
@@ -102,7 +120,7 @@ fun RegisterScreen(navController: NavController?) {
                                     val userId = auth.currentUser?.uid
                                     if (userId != null) {
                                         saveUserDataToFireStore(userId, firstName, lastName, email)
-                                        navController?.navigate(Routes.LOGIN)
+                                        navController?.navigate(Routes.SECOND_REGISTER)
                                     }
                                 }
                                 is AuthResponse.Error -> errorMessage = response.message
