@@ -27,6 +27,7 @@ import androidx.compose.material.icons.filled.Flag
 import androidx.compose.material.icons.filled.GTranslate
 import androidx.compose.material.icons.filled.GroupAdd
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.PersonAddAlt
 import androidx.compose.material.icons.filled.Redeem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -68,7 +69,7 @@ fun ProfileScreen(navController: NavController) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
     var selectedImageBitmap by remember { mutableStateOf<ImageBitmap?>(null) }
-    var userName by remember { mutableStateOf("") }
+    var userName by remember { mutableStateOf("User Name") }
 
     LaunchedEffect(Unit) {
         fetchUserData { name, base64Image ->
@@ -91,7 +92,7 @@ fun ProfileScreen(navController: NavController) {
     )
 
     Scaffold(
-        topBar = { AppToolbar("") },
+        topBar = { AppToolbar(toolbarTitle = "", height = 40) },
         bottomBar = { BottomAppBar(navController, currentRoute) }
     ) { innerPadding ->
         Surface(
@@ -154,7 +155,7 @@ fun ProfileScreen(navController: NavController) {
 
                     Spacer(modifier = Modifier.fillMaxWidth().height(40.dp))
 
-                    TwoItemsRow(icon = Icons.Filled.GroupAdd , label = "Invite Friends")
+                    TwoItemsRow(icon = Icons.Filled.PersonAddAlt , label = "Invite Friends")
 
                     Spacer(modifier = Modifier.fillMaxWidth().height(40.dp))
 

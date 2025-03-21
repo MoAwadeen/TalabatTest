@@ -1,5 +1,6 @@
 package test.compose.components
 
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -28,6 +29,7 @@ import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.PermIdentity
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.BottomAppBar
@@ -50,6 +52,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.graphicsLayer
@@ -389,9 +392,9 @@ fun GoogleSignInButtonPreview() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppToolbar(toolbarTitle: String) {
+fun AppToolbar(toolbarTitle: String, height: Int) {
     TopAppBar(
-        modifier = Modifier.fillMaxWidth().height(40.dp),
+        modifier = Modifier.fillMaxWidth().height(height.dp),
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = Orange,
             titleContentColor = Color.White,
@@ -511,7 +514,7 @@ fun BottomAppBar(navController: NavController, currentRoute: String?) {
                 ) {
                     IconButton(modifier = Modifier.size(24.dp), onClick = { navController.navigate(Routes.PROFILE) }) {
                         Icon(
-                            Icons.Filled.AccountCircle,
+                            Icons.Filled.PermIdentity,
                             contentDescription = "Account",
                             modifier = Modifier.size(24.dp)
                         )
@@ -735,7 +738,7 @@ fun ImageTextCardContext(index: Int,
             }
     ) {
         Column(
-            modifier = Modifier.fillMaxSize().padding(8.dp).background(Color.White),
+            modifier = Modifier.fillMaxSize().background(Color.White).padding(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             AsyncImage(
@@ -816,7 +819,7 @@ fun ImageTwoTextCardContext(index: Int,
             }
     ) {
         Column(
-            modifier = Modifier.fillMaxSize().padding(8.dp).background(Color.White)
+            modifier = Modifier.fillMaxSize().background(Color.White).padding(8.dp)
         ) {
             AsyncImage(
                 modifier = Modifier
@@ -889,8 +892,8 @@ fun FavoriteCardContext(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(8.dp)
                 .background(Color.White)
+                .padding(8.dp)
         ) {
             AsyncImage(
                 modifier = Modifier
@@ -947,5 +950,193 @@ fun FavoriteCardContext(
                 }
             }
         }
+    }
+}
+
+@Composable
+fun ResultsCardContent(
+    index: Int,
+    pagerState: PagerState,
+    selectedImage: ImageBitmap?,
+    userName: String,
+    text2: List<String>,
+    onClick: () -> Unit
+) {
+    val pageOffset = (pagerState.currentPage - index) + pagerState.currentPageOffsetFraction
+
+    Card(
+        shape = RoundedCornerShape(12.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(160.dp)
+            .background(Color.White)
+            .border(4.dp, Orange, RoundedCornerShape(10.dp))
+            .graphicsLayer {
+                alpha = lerp(
+                    start = 0.8f,
+                    stop = 1f,
+                    fraction = 1f - pageOffset.absoluteValue.coerceIn(0f, 1f)
+                )
+            }
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.White)
+                .padding(10.dp)
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 8.dp)
+                    .weight(1f),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                if (selectedImage != null) {
+                    Image(
+                        bitmap = selectedImage,
+                        contentDescription = "Profile Image",
+                        modifier = Modifier.size(50.dp).clip(CircleShape).clickable { onClick() }
+                            .border(2.dp, Orange,RoundedCornerShape(100.dp))
+                        , contentScale = ContentScale.Crop)
+                } else {
+                    Icon(
+                        imageVector = Icons.Filled.AccountCircle,
+                        contentDescription = "Default Profile Image",
+                        modifier = Modifier
+                            .size(50.dp)
+                            .clip(CircleShape)
+                            .border(2.dp, Orange,RoundedCornerShape(100.dp))
+                            .clickable { onClick() })
+                }
+
+                Column(
+                    modifier = Modifier
+                        .height(50.dp)
+                        .width(50.dp),
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = userName,
+                        fontSize = 14.sp,
+                        color = Orange,
+                        fontWeight = FontWeight.SemiBold,
+                        maxLines = 1
+                    )
+                    Text(
+                        text = text2[index].split(",").getOrNull(0)?.trim() ?: "",
+                        fontSize = 12.sp,
+                        color = Orange,
+                        fontWeight = FontWeight.SemiBold,
+                        maxLines = 1
+                    )
+                }
+
+                Text(
+                    text = "[${text2[index].trim()}-${text2[index].trim()}]",
+                    fontSize = 14.sp,
+                    color = Orange,
+                    fontWeight = FontWeight.SemiBold,
+                    textAlign = TextAlign.Center,
+                    maxLines = 1
+                )
+
+                Column(
+                    modifier = Modifier
+                        .height(50.dp)
+                        .width(50.dp),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.End
+                ) {
+                    Text(
+                        text = userName,
+                        fontSize = 14.sp,
+                        color = Orange,
+                        fontWeight = FontWeight.SemiBold,
+                        maxLines = 1
+                    )
+                    Text(
+                        text = text2[index].split(",").getOrNull(0)?.trim() ?: "",
+                        fontSize = 12.sp,
+                        color = Orange,
+                        fontWeight = FontWeight.SemiBold,
+                        maxLines = 1,
+                    )
+                }
+
+                if (selectedImage != null) {
+                    Image(
+                        bitmap = selectedImage,
+                        contentDescription = "Profile Image",
+                        modifier = Modifier.size(50.dp).clip(CircleShape).clickable { onClick() }
+                            .border(2.dp, Orange,RoundedCornerShape(100.dp))
+                        , contentScale = ContentScale.Crop)
+                } else {
+                    Icon(
+                        imageVector = Icons.Filled.AccountCircle,
+                        contentDescription = "Default Profile Image",
+                        modifier = Modifier
+                            .size(50.dp)
+                            .clip(CircleShape)
+                            .border(2.dp, Orange,RoundedCornerShape(100.dp))
+                            .clickable { onClick() })
+                }
+            }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp)
+            ) {
+                Text(
+                    text = userName,
+                    fontSize = 16.sp,
+                    color = Orange,
+                    fontWeight = FontWeight.SemiBold,
+                    maxLines = 1
+                )
+            }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 2.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = text2[index].split(",").getOrNull(0)?.trim() ?: "",
+                    fontSize = 16.sp,
+                    color = Orange,
+                    fontWeight = FontWeight.SemiBold,
+                    maxLines = 1
+                )
+
+                Text(
+                    text = "View Analysis",
+                    fontSize = 18.sp,
+                    color = Color.Yellow,
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier.clickable { onClick() }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun HorizontalLine(color: Color, thickness: Float) {
+    Canvas(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(14.dp)
+            .height(thickness.dp)
+    ) {
+        drawLine(
+            color = color,
+            start = Offset(0f, size.height / 2),
+            end = Offset(size.width, size.height / 2),
+            strokeWidth = thickness
+        )
     }
 }
