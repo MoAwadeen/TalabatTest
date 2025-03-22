@@ -12,7 +12,12 @@
           "package_name": "test.compose"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "317228805162-0398srat2dtf7vj2ali3m58bl6qm00u6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAVlsdArovQbZMcWhZpZhKjPai0oqw5caA"
@@ -20,7 +25,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "317228805162-0398srat2dtf7vj2ali3m58bl6qm00u6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

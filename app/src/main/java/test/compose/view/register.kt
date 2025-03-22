@@ -145,12 +145,10 @@ fun RegisterScreen(navController: NavController?) {
                 }
             )
 
-            GoogleSignInButton {
-                // Handle Google Sign-In logic here
             }
         }
     }
-}
+
 
 private fun saveUserDataToFireStore(userId: String, firstName: String, lastName: String, email: String) {
     val firestore = FirebaseFirestore.getInstance()

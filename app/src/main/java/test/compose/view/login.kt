@@ -30,7 +30,6 @@ import test.compose.AuthenticationManager
 import test.compose.components.BasicButton
 import test.compose.components.BoldTextComponent
 import test.compose.components.ClickableTextComponent
-import test.compose.components.GoogleSignInButton
 import test.compose.components.NormalTextComponent
 import test.compose.components.OutlinedTextFieldEmail
 import test.compose.components.OutlinedTextFieldPassword
@@ -43,7 +42,7 @@ fun LoginScreen(navController: NavController){
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var errorMessage by remember { mutableStateOf<String?>(null) }
+    var errorMessage by remember { mutableStateOf("") }
     val authManager = AuthenticationManager()
     val coroutineScope = rememberCoroutineScope()
 
@@ -87,16 +86,21 @@ fun LoginScreen(navController: NavController){
                             }
                         }
                     }
+                    if (email.isBlank() || password.isBlank()) {
+                        errorMessage = "Email and password cannot be empty"
+                        return@BasicButton
+                    }
                 }
             )
+            if (errorMessage.isNotEmpty()) {
+                Spacer(modifier = Modifier.height(10.dp))
+                BoldTextComponent(value = errorMessage)
+            }
             Spacer(modifier = Modifier.height(29.dp))
             ClickableTextComponent(
                 value = "Create new account ?",
                 onClick = {navController.navigate(Routes.REGISTER)}
             )
-
-            GoogleSignInButton {  }
-
 
         }
 
