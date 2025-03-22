@@ -9,5 +9,7 @@ object Routes {
     const val PROFILE = "PROFILE"
     const val RESULTS = "RESULTS"
     const val SECOND_REGISTER = "SECOND_REGISTER"
+    const val ITEM_PREVIEW = "ITEM_PREVIEW"
+
 
 }

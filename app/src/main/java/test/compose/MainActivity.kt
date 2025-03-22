@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import kotlinx.coroutines.channels.awaitClose
@@ -14,6 +15,7 @@ import test.compose.ui.theme.MyApplicationTheme
 import test.compose.view.AppNavigationGraph
 
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -22,6 +24,7 @@ class MainActivity : ComponentActivity() {
                 NavigatePage()
             }
         }
+
     }
 }
 

@@ -70,4 +70,10 @@ dependencies {
     implementation ("androidx.compose.material:material-icons-extended:1.5.4")
     implementation ("com.google.firebase:firebase-firestore:24.9.1")
     implementation ("com.google.firebase:firebase-storage:20.3.0")
+    implementation("com.google.android.gms:play-services-identity:18.0.1")
+    implementation(libs.androidx.credentials)
+    api(libs.googleid)
+    implementation("androidx.credentials:credentials:1.1.0-alpha03")
+    implementation("com.google.android.gms:play-services-auth:20.7.0")
+    implementation("androidx.activity:activity-ktx:1.8.0")
 }

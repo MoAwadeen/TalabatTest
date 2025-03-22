@@ -1,5 +1,6 @@
 package test.compose.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -8,6 +9,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,8 +26,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Home
@@ -62,6 +66,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.Role.Companion.Button
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -129,7 +134,13 @@ fun OutlinedTextFieldEmail(label: String, text: String, onValueChange: (String) 
         colors = OutlinedTextFieldDefaults.colors(
             focusedBorderColor = Orange,
             unfocusedBorderColor = Bg,
-            cursorColor = Orange
+            cursorColor = Orange,
+            focusedLabelColor = Brown,
+            unfocusedLabelColor = Brown,
+            unfocusedTrailingIconColor = Brown,
+            focusedTextColor = Orange,
+            unfocusedTextColor = Orange,
+            unfocusedPlaceholderColor = Orange
         )
     )
 }
@@ -147,7 +158,13 @@ fun OutlinedTextFieldPassword(label: String, text: String, onValueChange: (Strin
         colors = OutlinedTextFieldDefaults.colors(
             focusedBorderColor = Orange,
             unfocusedBorderColor = Bg,
-            cursorColor = Orange
+            cursorColor = Orange,
+            focusedLabelColor = Brown,
+            unfocusedLabelColor = Brown,
+            unfocusedTrailingIconColor = Brown,
+            focusedTextColor = Orange,
+            unfocusedTextColor = Orange,
+            unfocusedPlaceholderColor = Orange
         )
     )
 }
@@ -157,10 +174,17 @@ fun BasicButton(label: String, onClick: () -> Unit ){
     Button(onClick = { onClick() },
         colors = ButtonDefaults.buttonColors(containerColor = Orange),
         modifier = Modifier.fillMaxWidth().height(60.dp),
-        shape = RoundedCornerShape(100.dp))
+        shape = RoundedCornerShape(100.dp),
+        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp))
     {
         Text(label, fontSize = 20.sp, color = Color.White , fontWeight = FontWeight.SemiBold)
     }
+}
+
+@Preview
+@Composable
+fun BasicButtonPreview(){
+    BasicButton(label = "Login", onClick = {})
 }
 
 @Composable
@@ -355,10 +379,11 @@ fun GoogleSignInButton(onClick: () -> Unit) {
 
     Button(
         colors = ButtonDefaults.buttonColors(containerColor = Bg),
-        onClick = onClick, // Orange color
+        onClick = onClick,
         modifier = Modifier
             .fillMaxWidth()
             .height(60.dp),
+        border = BorderStroke(4.dp, Orange),
         shape = RoundedCornerShape(100.dp)
     ) {
         Row(
@@ -366,7 +391,7 @@ fun GoogleSignInButton(onClick: () -> Unit) {
             horizontalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxWidth(),
 
-        ) {
+            ) {
             Image(
                 painter = painterResource(id = R.drawable.google), // Add Google logo in drawable
                 contentDescription = "Google Sign-In",
@@ -430,7 +455,7 @@ fun HomeAppToolbar(toolbarTitle: String, userName: String) {
                 Text(
                     text = toolbarTitle,
                     style = TextStyle(
-                        fontSize = 30.sp,
+                        fontSize = 24.sp,
                         fontWeight = FontWeight.Bold,
                         fontStyle = FontStyle.Normal
                     )
@@ -438,7 +463,7 @@ fun HomeAppToolbar(toolbarTitle: String, userName: String) {
                 Text(
                     text = "Hi, $userName 👋",
                     style = TextStyle(
-                        fontSize = 18.sp,
+                        fontSize = 14.sp,
                         fontWeight = FontWeight.SemiBold,
                         color = Color.White
                     ),
@@ -455,16 +480,18 @@ fun BottomAppBar(navController: NavController, currentRoute: String?) {
         modifier = Modifier.fillMaxWidth().height(60.dp),
         containerColor = Orange,
         contentColor = Color.White,
-        tonalElevation = 8.dp,
+        tonalElevation = 16.dp,
+        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
         actions = {
             Row(
                 modifier = Modifier.fillMaxSize().align(Alignment.Top).padding(4.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.Top
+
             ) {
                 Column(
                     verticalArrangement = Arrangement.Top,
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     IconButton(modifier = Modifier.size(24.dp), onClick = { navController.navigate(Routes.HOME) }) {
                         Icon(
@@ -477,7 +504,7 @@ fun BottomAppBar(navController: NavController, currentRoute: String?) {
                         Text(
                             text = "Home",
                             style = TextStyle(
-                                fontSize = 12.sp,
+                                fontSize = 10.sp,
                                 fontWeight = FontWeight.SemiBold,
                                 color = Color.White
                             ),
@@ -500,7 +527,7 @@ fun BottomAppBar(navController: NavController, currentRoute: String?) {
                         Text(
                             text = "Favorites",
                             style = TextStyle(
-                                fontSize = 12.sp,
+                                fontSize = 10.sp,
                                 fontWeight = FontWeight.SemiBold,
                                 color = Color.White
                             ),
@@ -523,7 +550,7 @@ fun BottomAppBar(navController: NavController, currentRoute: String?) {
                         Text(
                             text = "Account",
                             style = TextStyle(
-                                fontSize = 12.sp,
+                                fontSize = 10.sp,
                                 fontWeight = FontWeight.SemiBold,
                                 color = Color.White
                             ),
@@ -785,7 +812,7 @@ fun TwoTextsRow(text1: String, text2: String, onClick: () -> Unit) {
         Text(
             text = text2,
             fontSize = 18.sp,
-            color = Color.Yellow,
+            color = Brown,
             fontWeight = FontWeight.Normal,
             modifier = Modifier.clickable { onClick() }
         )
@@ -1137,6 +1164,60 @@ fun HorizontalLine(color: Color, thickness: Float) {
             start = Offset(0f, size.height / 2),
             end = Offset(size.width, size.height / 2),
             strokeWidth = thickness
+        )
+    }
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ItemToolbar(itemName: String) {
+
+    val navController = rememberNavController()
+
+    TopAppBar(
+        modifier = Modifier.fillMaxWidth().height(90.dp),
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = Orange,
+            titleContentColor = Color.White,
+        ),
+        title = {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                BackButton(navController)
+                Text(
+                    text = itemName,
+                    style = TextStyle(
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White
+                    )
+                )
+            }
+        }
+    )
+}
+
+@Preview
+@Composable
+fun ItemToolbarPreview() {
+    ItemToolbar("Item Name")
+}
+
+
+
+@Composable
+fun BackButton(navController: NavController) {
+    IconButton(
+        onClick = { navController.navigate(Routes.HOME) },
+        modifier = Modifier.size(48.dp) // Adjust size if needed
+    ) {
+        Icon(
+            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+            contentDescription = "Back"
         )
     }
 }

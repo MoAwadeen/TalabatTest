@@ -62,7 +62,7 @@ fun HomeScreen(navController: NavController) {
     var selectedImage by remember { mutableStateOf<ImageBitmap?>(null) }
 
     val actions = listOf(
-        { navController.navigate(Routes.PROFILE) },
+        { navController.navigate(Routes.ITEM_PREVIEW) },
         { navController.navigate(Routes.SPLASH) },
         { navController.navigate(Routes.PROFILE) },
         { navController.navigate(Routes.SPLASH) },
@@ -245,7 +245,7 @@ fun HomeScreen(navController: NavController) {
 }
 
 val images = listOf(
-    "https://www.w3schools.com/w3images/lights.jpg",
+    "https://img.freepik.com/free-photo/side-view-double-cheeseburger-with-grilled-beef-patties-cheese-lettuce-leaf-burger-buns_141793-4883.jpg?t=st=1742615974~exp=1742619574~hmac=f78cbcaf7f50de9d5fcbdb63526682f130827bd5bdea61c3b6bfd4b55a27effa&w=1380",
     "https://www.w3schools.com/w3images/mountains.jpg",
     "https://www.w3schools.com/w3images/forest.jpg",
     "https://www.w3schools.com/w3images/nature.jpg",
@@ -256,7 +256,7 @@ val images = listOf(
 )
 
 val texts1 = listOf(
-    "Lights",
+    "Cheese Burger",
     "Mountains",
     "Forest",
     "Nature",

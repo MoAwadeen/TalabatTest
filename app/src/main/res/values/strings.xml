@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">talabat Test</string>
+    <string name="client_id">317228805162-0398srat2dtf7vj2ali3m58bl6qm00u6.apps.googleusercontent.com</string>
+    <string name="error_invalid_credentials">Invalid Credentials Found</string>
+    <string name="error_invalid_user">Invalid User Found</string>
+    <string name="error_unknown">Something Not Correct!</string>
 </resources>
